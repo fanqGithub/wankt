@@ -17,11 +17,13 @@ import com.fanqi.wankt.common.bean.DataX
 import com.fanqi.wankt.utils.Logger
 import retrofit2.Callback
 
+
+//https://androidwave.com/android-paging-library/
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var homeAdapter: HomeAdapter
-    private lateinit var listData:ArrayList<DataX>
+    private lateinit var listData: ArrayList<DataX>
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
@@ -30,12 +32,17 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
+                //Fragment绑定ViewModel , of(getActivity())与of(this)的区别
+                //mViewModel = ViewModelProviders.of(getActivity()).get(DemoViewModel.class);
+                // 使用getActivity()获得的ViewModel 作用域在Activity里和所有他创建碎片的里,意思是你在其他Fragment也获取相同内存地址的ViewModel
+                //mViewModel = ViewModelProviders.of(this).get(DemoViewModel.class);
+                // 这个ViewModel是独立的,只为这个Fragment单独服务,其他Fragment无法获取到相同内存地址的ViewModel
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 //        homeViewModel.text.observe(this, Observer {
 //            textView.text = it
 //        })
-        recyclerView=root.findViewById(R.id.recycler_view)
+        recyclerView = root.findViewById(R.id.recycler_view)
         init()
 
         homeViewModel.initData()
@@ -58,13 +65,13 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    fun init(){
-        var linearLayoutManager:LinearLayoutManager=LinearLayoutManager(activity)
-        linearLayoutManager.orientation=LinearLayoutManager.VERTICAL
-        recyclerView.layoutManager=linearLayoutManager
-        listData= arrayListOf()
-        homeAdapter= context?.let { HomeAdapter(listData, it) }!!
-        recyclerView.adapter=homeAdapter
+    fun init() {
+        var linearLayoutManager: LinearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        recyclerView.layoutManager = linearLayoutManager
+        listData = arrayListOf()
+        homeAdapter = context?.let { HomeAdapter(listData, it) }!!
+        recyclerView.adapter = homeAdapter
     }
 
 
