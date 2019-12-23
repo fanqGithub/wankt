@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.fanqi.wankt.ui.dashboard.DashboardFragment"
-        android:label="@string/title_search"
+        android:label="@string/title_folder"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.fanqi.wankt.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_android_tool"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

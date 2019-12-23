@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">wankt</string>
+    <string name="app_name">玩Android</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_home">首页</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">消息</string>
-    <string name="title_search">检索</string>
+    <string name="title_folder">项目</string>
+    <string name="title_android_tool">工具</string>
 </resources>
