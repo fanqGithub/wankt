@@ -1,5 +1,6 @@
 package com.fanqi.wankt.ui.home.paging
 
+import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -47,9 +48,25 @@ class HomePagingAdapter :
         private val category = itemView.category
         private val time = itemView.time
         private val favorite = itemView.favorite
+        private val freshTag = itemView.fresh_tag
+        private val desc = itemView.desc
 
 
         fun bind(dataX: DataX) {
+            if (dataX.fresh) {
+                freshTag.visibility = View.VISIBLE
+                freshTag.text = "新"
+            } else {
+                freshTag.visibility = View.GONE
+            }
+
+            if (!TextUtils.isEmpty(dataX.desc)) {
+                desc.visibility = View.VISIBLE
+                desc.text = Html.fromHtml(dataX.desc)
+            } else {
+                desc.visibility = View.GONE
+            }
+
             title.text = dataX.title
             if (!TextUtils.isEmpty(dataX.author)) {
                 share_user.text = "作者：${dataX.author}"

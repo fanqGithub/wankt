@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f4b733</color>
-    <color name="colorPrimaryDark">#f4b733</color>
+    <color name="colorPrimary">#77C9FF</color>
+    <color name="colorPrimaryDark">#77C9FF</color>
     <color name="colorAccent">#DAE19C</color>
 
 
@@ -11,4 +11,10 @@
     <color name="color_text_black">#4A4A4A</color>
 
     <color name="color_gray">#9B9B9B</color>
+    <color name="color_fresh">#FF0000</color>
+
+    <color name="color_category_selected">#77C9FF</color>
+    <color name="color_category_normal">#4A4A4A</color>
+
+    <color name="color_category_bg_normal">#F5F5F5</color>
 </resources>

@@ -1,23 +1,32 @@
 package com.fanqi.wankt.ui.home
 
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager.widget.ViewPager
 import com.fanqi.wankt.R
 import com.fanqi.wankt.common.ServiceFactory
 import com.fanqi.wankt.common.bean.DataX
 import com.fanqi.wankt.constant.Constant
 import com.fanqi.wankt.ui.ArticleContentActivity
 import com.fanqi.wankt.ui.home.paging.HomePagingAdapter
+import com.fanqi.wankt.utils.BannerImageLoader
+import com.fanqi.wankt.utils.ColorInfo
 import com.fanqi.wankt.utils.GlideImageLoader
 import com.fanqi.wankt.utils.Logger
 import com.youth.banner.Banner
@@ -34,12 +43,21 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var homePagingAdapter: HomePagingAdapter
     private lateinit var banner: Banner
+    private lateinit var listBannerUrl: ArrayList<String>
+    private lateinit var ivBannerHeadBg: ImageView
+    private lateinit var imageLoader: BannerImageLoader
+    private var isInit: Boolean = true
+    private var count: Int = 0
+    private lateinit var swipRefresh: SwipeRefreshLayout
+
+    private var colorList = arrayListOf<ColorInfo>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         homeViewModel =
                 //Fragment绑定ViewModel , of(getActivity())与of(this)的区别
                 //mViewModel = ViewModelProviders.of(getActivity()).get(DemoViewModel.class);
@@ -49,6 +67,9 @@ class HomeFragment : Fragment() {
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         recyclerView = root.findViewById(R.id.recycler_view)
+        ivBannerHeadBg = root.findViewById(R.id.iv_banner_head_bg)
+//        swipRefresh = root.findViewById(R.id.swipeRefresh)
+
         banner = root.findViewById(R.id.banner)
 
         init()
@@ -75,19 +96,72 @@ class HomeFragment : Fragment() {
     }
 
     fun init() {
+        colorList.clear()
+        listBannerUrl = arrayListOf()
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
+        banner.setOnBannerListener {
+            Intent(activity, ArticleContentActivity::class.java).run {
+                putExtra(Constant.CONTENT_URL_KEY, listBannerUrl[it])
+                startActivity(this)
+            }
+        }
+        banner.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
 
-        banner.setImageLoader(GlideImageLoader())
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                Logger.d("onPageScrolled position:$position")
+                var pst = position
+                var nexPst = pst + 1
+                if (pst == count - 1) {
+                    nexPst = 0
+                }
+                val vibrantColor = ColorUtils.blendARGB(
+                    imageLoader.getMutedLightColor(position),
+                    imageLoader.getMutedLightColor(nexPst),
+                    positionOffset
+                )
+                ivBannerHeadBg.setBackgroundColor(vibrantColor)
+                setStatusColor(vibrantColor)
+            }
+
+            override fun onPageSelected(position: Int) {
+                Logger.d("selected position:$position")
+                if (isInit) {
+                    isInit = false
+                    Handler().postDelayed({
+                        val vibrantColor = imageLoader.getMutedLightColor(0)
+                        ivBannerHeadBg.setBackgroundColor(vibrantColor)
+                        setStatusColor(vibrantColor)
+                    }, 100)
+
+                }
+            }
+
+        })
         homeViewModel.loadBanner()
         homeViewModel.homeBannerLiveData.observe(this, Observer {
             var listTitles = arrayListOf<String>()
             var listImages = arrayListOf<String>()
+            count = it.size
             for (item: com.fanqi.wankt.common.bean.Banner in it) {
                 listTitles.add(item.title)
                 listImages.add(item.imagePath)
+                listBannerUrl.add(item.url)
+                var colorInfo = ColorInfo()
+                colorInfo.imgUrl = item.imagePath
+                colorList.add(colorInfo)
             }
+
+            imageLoader = BannerImageLoader(colorList)
+            banner.setImageLoader(imageLoader)
             banner.setImages(listImages)
-            banner.setBannerTitles(listTitles)
+//            banner.setBannerTitles(listTitles)
             banner.isAutoPlay(true)
             banner.setDelayTime(3000)
             banner.start()
@@ -113,6 +187,7 @@ class HomeFragment : Fragment() {
             }
         })
         homeViewModel.homePagList.observe(this, Observer {
+            //            swipRefresh.isRefreshing = false
             homePagingAdapter.submitList(it)
         })
 
@@ -127,6 +202,11 @@ class HomeFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         banner.stopAutoPlay()
+    }
+
+    fun setStatusColor(color: Int) {
+        val window = activity?.getWindow()
+        window!!.statusBarColor = color
     }
 
 }

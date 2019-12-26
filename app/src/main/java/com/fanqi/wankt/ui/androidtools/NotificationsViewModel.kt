@@ -1,4 +1,4 @@
-package com.fanqi.wankt.ui.notifications
+package com.fanqi.wankt.ui.androidtools
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -6,7 +6,8 @@ package com.fanqi.wankt.constant
  */
 object Constant {
 
-    const val BASE_URL = "http://wanandroid.com/"
+    //https
+    const val BASE_URL = "https://wanandroid.com/"
 
     const val CONTENT_URL_KEY = "url"
 
