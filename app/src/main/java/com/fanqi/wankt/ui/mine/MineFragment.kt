@@ -23,12 +23,17 @@ class MineFragment : Fragment() {
         mineViewModel =
             ViewModelProviders.of(this).get(MineViewModel::class.java)
         val root = inflater.inflate(R.layout.mine_fragment, container, false)
-        val textView: TextView = root.findViewById(R.id.text_mine)
+        setStatusColor(resources.getColor(R.color.colorAccent))
         mineViewModel.init()
         mineViewModel.mineData.observe(this, Observer {
-            textView.text = it
+
         })
         return root
+    }
+
+    fun setStatusColor(color: Int) {
+        val window = activity?.getWindow()
+        window!!.statusBarColor = color
     }
 
 }

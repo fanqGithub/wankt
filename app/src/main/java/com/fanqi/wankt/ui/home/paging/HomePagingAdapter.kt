@@ -32,6 +32,14 @@ class HomePagingAdapter :
                 )
             }
         })
+        holder.favorite.setOnClickListener {
+            getItem(holder.adapterPosition)?.let { it1 ->
+                callBack.onFavoriteClick(
+                    holder.adapterPosition,
+                    it1
+                )
+            }
+        }
         return holder
     }
 
@@ -47,10 +55,9 @@ class HomePagingAdapter :
         private val share_user = itemView.share_user
         private val category = itemView.category
         private val time = itemView.time
-        private val favorite = itemView.favorite
+        val favorite = itemView.favorite
         private val freshTag = itemView.fresh_tag
         private val desc = itemView.desc
-
 
         fun bind(dataX: DataX) {
             if (dataX.fresh) {
@@ -94,6 +101,7 @@ class HomePagingAdapter :
 
     interface HomeListCallBack {
         fun onItemClick(position: Int, dataX: DataX)
+        fun onFavoriteClick(position: Int, dataX: DataX)
     }
 
     private lateinit var callBack: HomeListCallBack

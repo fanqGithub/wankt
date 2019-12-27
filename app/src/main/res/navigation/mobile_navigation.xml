@@ -19,8 +19,8 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.fanqi.wankt.ui.androidtools.NotificationsFragment"
-        android:label="@string/title_android_tool"
+        android:name="com.fanqi.wankt.ui.hot.HotSearchFragment"
+        android:label="@string/title_hot"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment

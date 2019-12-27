@@ -1,9 +1,6 @@
 package com.fanqi.wankt.common
 
-import com.fanqi.wankt.common.bean.BannerRespons
-import com.fanqi.wankt.common.bean.DataHomeList
-import com.fanqi.wankt.common.bean.ProjectListRespons
-import com.fanqi.wankt.common.bean.ProjectTreeRespons
+import com.fanqi.wankt.common.bean.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -35,4 +32,14 @@ interface WanService {
         @Path("page") page: Int,
         @Query("cid") cid: Int
     ): Call<ProjectListRespons>
+
+
+    //常用网站
+    @GET("/friend/json")
+    fun friendData(): Call<FriendRespons>
+
+    //热搜关键词
+    @GET("/hotkey/json")
+    fun hotKey(): Call<FriendRespons>
+
 }

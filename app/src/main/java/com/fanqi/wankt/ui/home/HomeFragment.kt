@@ -24,6 +24,7 @@ import com.fanqi.wankt.common.ServiceFactory
 import com.fanqi.wankt.common.bean.DataX
 import com.fanqi.wankt.constant.Constant
 import com.fanqi.wankt.ui.ArticleContentActivity
+import com.fanqi.wankt.ui.LoginActivity
 import com.fanqi.wankt.ui.home.paging.HomePagingAdapter
 import com.fanqi.wankt.utils.BannerImageLoader
 import com.fanqi.wankt.utils.ColorInfo
@@ -176,6 +177,13 @@ class HomeFragment : Fragment() {
         //采用paginglib
         homePagingAdapter = HomePagingAdapter()
         homePagingAdapter.setHomeListCallBack(object : HomePagingAdapter.HomeListCallBack {
+            override fun onFavoriteClick(position: Int, dataX: DataX) {
+                Logger.d("click item=${dataX.toString()}")
+                Intent(activity, LoginActivity::class.java).run {
+                    startActivity(this)
+                }
+            }
+
             override fun onItemClick(position: Int, dataX: DataX) {
                 Logger.d(dataX.toString())
                 Intent(activity, ArticleContentActivity::class.java).run {
