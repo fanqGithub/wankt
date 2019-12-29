@@ -85,7 +85,7 @@ class HotSearchFragment : Fragment() {
         textView.setBackgroundColor(Color.rgb(r, g, b))
         textView.setTextSize(14F)
         textView.setTag(position)
-        textView.setPadding(20, 10, 20, 10)
+        textView.setPadding(30, 20, 30, 20)
 
         val layoutParams = FlexboxLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,

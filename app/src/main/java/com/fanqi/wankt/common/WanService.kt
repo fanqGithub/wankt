@@ -2,9 +2,7 @@ package com.fanqi.wankt.common
 
 import com.fanqi.wankt.common.bean.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * Created by fanqi on 2019-12-19.
@@ -41,5 +39,23 @@ interface WanService {
     //热搜关键词
     @GET("/hotkey/json")
     fun hotKey(): Call<FriendRespons>
+
+    //登录
+    @FormUrlEncoded
+    @POST("/user/login")
+    fun login(
+        @Field("username") username: String,
+        @Field("password") password: String
+    ): Call<Any>
+
+
+    //注册
+    @FormUrlEncoded
+    @POST("/user/register")
+    fun register(
+        @Field("username") username: String,
+        @Field("password") password: String,
+        @Field("repassword") repassword: String
+    ): Call<Any>
 
 }
