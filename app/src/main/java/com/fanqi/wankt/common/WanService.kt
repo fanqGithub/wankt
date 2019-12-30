@@ -46,7 +46,7 @@ interface WanService {
     fun login(
         @Field("username") username: String,
         @Field("password") password: String
-    ): Call<Any>
+    ): Call<LoginResponse>
 
 
     //注册

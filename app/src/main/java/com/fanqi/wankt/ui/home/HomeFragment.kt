@@ -1,16 +1,12 @@
 package com.fanqi.wankt.ui.home
 
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,19 +16,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import com.fanqi.wankt.R
-import com.fanqi.wankt.common.ServiceFactory
+import com.fanqi.wankt.base.Preference
 import com.fanqi.wankt.common.bean.DataX
 import com.fanqi.wankt.constant.Constant
 import com.fanqi.wankt.ui.ArticleContentActivity
-import com.fanqi.wankt.ui.LoginActivity
+import com.fanqi.wankt.ui.login.LoginActivity
 import com.fanqi.wankt.ui.home.paging.HomePagingAdapter
 import com.fanqi.wankt.utils.BannerImageLoader
 import com.fanqi.wankt.utils.ColorInfo
-import com.fanqi.wankt.utils.GlideImageLoader
 import com.fanqi.wankt.utils.Logger
+import com.fanqi.wankt.utils.toast
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
-import retrofit2.Callback
 
 
 //https://androidwave.com/android-paging-library/
@@ -179,8 +174,13 @@ class HomeFragment : Fragment() {
         homePagingAdapter.setHomeListCallBack(object : HomePagingAdapter.HomeListCallBack {
             override fun onFavoriteClick(position: Int, dataX: DataX) {
                 Logger.d("click item=${dataX.toString()}")
-                Intent(activity, LoginActivity::class.java).run {
-                    startActivity(this)
+                var userName: String by Preference(Constant.USER_NAME, "")
+                if (userName.isEmpty()) {
+                    Intent(activity, LoginActivity::class.java).run {
+                        startActivity(this)
+                    }
+                } else {
+                    context?.let { toast("收藏开发中...", it) }
                 }
             }
 
