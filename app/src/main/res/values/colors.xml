@@ -17,4 +17,6 @@
     <color name="color_category_normal">#4A4A4A</color>
 
     <color name="color_category_bg_normal">#F5F5F5</color>
+
+    <color name="color_orange">#FFA300</color>
 </resources>

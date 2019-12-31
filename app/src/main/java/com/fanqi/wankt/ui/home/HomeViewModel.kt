@@ -20,7 +20,7 @@ import retrofit2.Response
 //负责数据的获取绑定
 class HomeViewModel : ViewModel() {
 
-    var homeBannerLiveData=MutableLiveData<List<Banner>>()
+    var homeBannerLiveData = MutableLiveData<List<Banner>>()
 
 //    private var currentPage = 0
 //
@@ -79,18 +79,65 @@ class HomeViewModel : ViewModel() {
     }
 
 
-    fun loadBanner(){
+    fun loadBanner() {
         val call = ServiceFactory.INSTANCE.wanService.banner()
-        call.enqueue(object :Callback<BannerRespons>{
+        call.enqueue(object : Callback<BannerRespons> {
             override fun onResponse(call: Call<BannerRespons>, response: Response<BannerRespons>) {
-                if (response.isSuccessful){
-                    val listBanner= response.body()?.bannerList
+                if (response.isSuccessful) {
+                    val listBanner = response.body()?.bannerList
                     homeBannerLiveData.postValue(listBanner)
                 }
             }
 
             override fun onFailure(call: Call<BannerRespons>, t: Throwable) {
                 Logger.e(t.toString())
+            }
+
+        })
+    }
+
+    fun collectArt(artId: Int) {
+        val call = ServiceFactory.INSTANCE.wanService.collectArticle(artId)
+        call.enqueue(object : Callback<com.fanqi.wankt.common.bean.Response<Any>> {
+            override fun onFailure(
+                call: Call<com.fanqi.wankt.common.bean.Response<Any>>,
+                t: Throwable
+            ) {
+
+            }
+
+            override fun onResponse(
+                call: Call<com.fanqi.wankt.common.bean.Response<Any>>,
+                response: Response<com.fanqi.wankt.common.bean.Response<Any>>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                    }
+                }
+            }
+        })
+    }
+
+    fun removeCollect(artId: Int) {
+        val call = ServiceFactory.INSTANCE.wanService.removeCollectArticle(artId)
+        call.enqueue(object : Callback<com.fanqi.wankt.common.bean.Response<Any>> {
+            override fun onFailure(
+                call: Call<com.fanqi.wankt.common.bean.Response<Any>>,
+                t: Throwable
+            ) {
+
+            }
+
+            override fun onResponse(
+                call: Call<com.fanqi.wankt.common.bean.Response<Any>>,
+                response: Response<com.fanqi.wankt.common.bean.Response<Any>>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                    }
+                }
             }
 
         })

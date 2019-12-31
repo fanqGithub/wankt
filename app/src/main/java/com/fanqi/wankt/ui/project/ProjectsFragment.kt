@@ -16,6 +16,9 @@ import com.fanqi.wankt.common.bean.ProjectCategory
 import com.fanqi.wankt.common.bean.ProjectItem
 import com.fanqi.wankt.constant.Constant
 import com.fanqi.wankt.ui.ArticleContentActivity
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader
+import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 class ProjectsFragment : Fragment() {
@@ -28,6 +31,9 @@ class ProjectsFragment : Fragment() {
     private lateinit var projectItemAdapter: ProjectItemAdapter
     private var categoryList = arrayListOf<ProjectCategory>()
     private var projectItemList = arrayListOf<ProjectItem>()
+
+    private lateinit var refreshView: SmartRefreshLayout
+    private var selectedCid = 0
 
 
     override fun onCreateView(
@@ -43,6 +49,9 @@ class ProjectsFragment : Fragment() {
 //            textView.text = it
 //        })
         categoryRecyclerView = root.categoryList
+        refreshView = root.refreshLayout
+        refreshView.setRefreshHeader(ClassicsHeader(context));
+
         projetRecyclerView = root.projectList
         categoryAdapter = CategoryAdapter(categoryList)
         categoryAdapter.setCategoryCallBack(categoryAdapterCallBack)
@@ -67,13 +76,27 @@ class ProjectsFragment : Fragment() {
             categoryAdapter.notifyDataSetChanged()
             //page
             var firstCategory = it[0]
+            selectedCid = firstCategory.id
             dashboardViewModel.initPage(firstCategory.id)
         })
 
         dashboardViewModel.projectDatas.observe(this, Observer {
+            refreshView.finishRefresh()
+            refreshView.finishLoadMore()
             projectItemList.addAll(it)
             projectItemAdapter.notifyDataSetChanged()
         })
+
+        refreshView.setOnRefreshListener {
+            //            it.finishRefresh(2000/*,false*/);
+            projectItemList.clear()
+            dashboardViewModel.initPage(selectedCid)
+        }
+
+        refreshView.setOnLoadMoreListener {
+            dashboardViewModel.nextPage(selectedCid)
+//            it.finishLoadMore(2000)
+        }
 
     }
 
@@ -81,6 +104,7 @@ class ProjectsFragment : Fragment() {
 
         override fun onSelected(position: Int, category: ProjectCategory) {
             //
+            selectedCid = category.id
             projectItemList.clear()
             dashboardViewModel.initPage(category.id)
         }

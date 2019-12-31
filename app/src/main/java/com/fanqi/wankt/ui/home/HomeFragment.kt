@@ -26,6 +26,8 @@ import com.fanqi.wankt.utils.BannerImageLoader
 import com.fanqi.wankt.utils.ColorInfo
 import com.fanqi.wankt.utils.Logger
 import com.fanqi.wankt.utils.toast
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 
@@ -44,7 +46,7 @@ class HomeFragment : Fragment() {
     private lateinit var imageLoader: BannerImageLoader
     private var isInit: Boolean = true
     private var count: Int = 0
-    private lateinit var swipRefresh: SwipeRefreshLayout
+    private lateinit var refreshLayout: SmartRefreshLayout
 
     private var colorList = arrayListOf<ColorInfo>()
 
@@ -65,6 +67,9 @@ class HomeFragment : Fragment() {
         recyclerView = root.findViewById(R.id.recycler_view)
         ivBannerHeadBg = root.findViewById(R.id.iv_banner_head_bg)
 //        swipRefresh = root.findViewById(R.id.swipeRefresh)
+        refreshLayout = root.findViewById(R.id.refreshLayout)
+        refreshLayout.setEnableLoadMore(false)
+        refreshLayout.setRefreshHeader(ClassicsHeader(context))
 
         banner = root.findViewById(R.id.banner)
 
@@ -87,6 +92,9 @@ class HomeFragment : Fragment() {
 //            }
 //
 //        })
+        refreshLayout.setOnRefreshListener {
+            it.finishRefresh(2000)
+        }
 
         return root
     }
@@ -123,6 +131,7 @@ class HomeFragment : Fragment() {
                     positionOffset
                 )
                 ivBannerHeadBg.setBackgroundColor(vibrantColor)
+//                refreshLayout.setBackgroundColor(vibrantColor)
                 setStatusColor(vibrantColor)
             }
 
@@ -133,6 +142,7 @@ class HomeFragment : Fragment() {
                     Handler().postDelayed({
                         val vibrantColor = imageLoader.getMutedLightColor(0)
                         ivBannerHeadBg.setBackgroundColor(vibrantColor)
+//                        refreshLayout.setBackgroundColor(vibrantColor)
                         setStatusColor(vibrantColor)
                     }, 100)
 
@@ -180,7 +190,15 @@ class HomeFragment : Fragment() {
                         startActivity(this)
                     }
                 } else {
-                    context?.let { toast("收藏开发中...", it) }
+//                    context?.let { toast("收藏开发中...", it) }
+                    var isCollect = !dataX.collect
+                    dataX.collect = isCollect
+                    homePagingAdapter.notifyDataSetChanged()
+                    if (isCollect) {
+                        homeViewModel.collectArt(dataX.id)
+                    } else {
+                        homeViewModel.removeCollect(dataX.id)
+                    }
                 }
             }
 
