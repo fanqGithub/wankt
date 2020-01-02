@@ -66,7 +66,7 @@ class ProjectsFragment : Fragment() {
         return root
     }
 
-    fun init() {
+    private fun init() {
         setStatusColor(resources.getColor(R.color.colorAccent))
 
         categoryList.clear()
@@ -100,7 +100,7 @@ class ProjectsFragment : Fragment() {
 
     }
 
-    var categoryAdapterCallBack = object : CategoryAdapter.CategoryAdapterCallBack {
+    private var categoryAdapterCallBack = object : CategoryAdapter.CategoryAdapterCallBack {
 
         override fun onSelected(position: Int, category: ProjectCategory) {
             //
@@ -110,7 +110,7 @@ class ProjectsFragment : Fragment() {
         }
     }
 
-    var itemCallBack = object : ProjectItemAdapter.ItemCallBack {
+    private var itemCallBack = object : ProjectItemAdapter.ItemCallBack {
         override fun onItemClick(position: Int, projectItem: ProjectItem) {
             Intent(activity, ArticleContentActivity::class.java).run {
                 putExtra(Constant.CONTENT_URL_KEY, projectItem.link)
@@ -120,7 +120,7 @@ class ProjectsFragment : Fragment() {
 
     }
 
-    fun setStatusColor(color: Int) {
+    private fun setStatusColor(color: Int) {
         val window = activity?.getWindow()
         window!!.statusBarColor = color
     }

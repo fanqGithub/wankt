@@ -50,7 +50,7 @@ class HotSearchFragment : Fragment() {
     }
 
 
-    fun initData() {
+    private fun initData() {
         hotSearchFlex.removeAllViews()
         commonUseFlex.removeAllViews()
 
@@ -72,7 +72,7 @@ class HotSearchFragment : Fragment() {
         })
     }
 
-    fun createTagView(position: Int, friendData: FriendData): TextView {
+    private fun createTagView(position: Int, friendData: FriendData): TextView {
         var random: Random = Random()
         val r = random.nextInt(256)
         val g = random.nextInt(256)
@@ -107,7 +107,7 @@ class HotSearchFragment : Fragment() {
         return textView
     }
 
-    fun setStatusColor(color: Int) {
+    private fun setStatusColor(color: Int) {
         val window = activity?.getWindow()
         window!!.statusBarColor = color
     }

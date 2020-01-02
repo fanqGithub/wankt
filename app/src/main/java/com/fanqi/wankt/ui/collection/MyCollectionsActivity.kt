@@ -3,6 +3,7 @@ package com.fanqi.wankt.ui.collection
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +30,8 @@ class MyCollectionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_collections)
+        var actionBar = getSupportActionBar()
+        actionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel = ViewModelProviders.of(this).get(MycollectionViewModel::class.java)
         collectionRecyclerView = collectionList
         refreshView = refreshLayout
@@ -46,13 +49,21 @@ class MyCollectionsActivity : AppCompatActivity() {
     }
 
 
-    var itemCallBack = object : CollectionAdapter.ItemCallBack {
+    private var itemCallBack = object : CollectionAdapter.ItemCallBack {
         override fun onItemClick(item: Collection) {
             Intent(this@MyCollectionsActivity, ArticleContentActivity::class.java).run {
                 putExtra(Constant.CONTENT_URL_KEY, item.link)
                 startActivity(this)
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
