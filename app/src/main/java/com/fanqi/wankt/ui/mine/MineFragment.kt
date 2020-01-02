@@ -53,8 +53,6 @@ class MineFragment : Fragment(), View.OnClickListener {
     private lateinit var tvSort: TextView
     private lateinit var collectionView: RelativeLayout
 
-    private lateinit var loginViewModel: LoginViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,8 +60,6 @@ class MineFragment : Fragment(), View.OnClickListener {
     ): View? {
         mineViewModel =
             ViewModelProviders.of(this).get(MineViewModel::class.java)
-
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
         val root = inflater.inflate(R.layout.mine_fragment, container, false)
 
@@ -76,7 +72,6 @@ class MineFragment : Fragment(), View.OnClickListener {
         collectionView.setOnClickListener(this)
         setStatusColor(resources.getColor(R.color.colorPrimary))
         initView()
-        viewModelObserver()
 
         mineViewModel.initUserData()
         mineViewModel.mineData.observe(this, Observer {
@@ -104,15 +99,6 @@ class MineFragment : Fragment(), View.OnClickListener {
         userNameTv.text = "点击登录"
         tvCoins.text = ""
         tvSort.text = ""
-    }
-
-    private fun viewModelObserver() {
-        loginViewModel.loginResult.observe(this, Observer {
-            if (it.errorCode == 0) {
-                //refresh userinfo
-                mineViewModel.initUserData()
-            }
-        })
     }
 
     private fun setStatusColor(color: Int) {
