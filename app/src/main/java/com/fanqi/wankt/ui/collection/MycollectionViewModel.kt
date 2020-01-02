@@ -15,10 +15,8 @@ import retrofit2.Callback
  */
 class MycollectionViewModel : ViewModel() {
 
-    var collectionsLiveData = MutableLiveData<List<Collection>>()
-
-
-    fun collections() {
+    fun collections(): MutableLiveData<List<Collection>> {
+        var collectionsLiveData = MutableLiveData<List<Collection>>()
         val call = ServiceFactory.INSTANCE.wanService.collectionList(currentPage)
         call.enqueue(object : Callback<Response<CollectionPageData>> {
             override fun onFailure(call: Call<Response<CollectionPageData>>, t: Throwable) {
@@ -33,23 +31,24 @@ class MycollectionViewModel : ViewModel() {
                     val responseBody = response.body()
                     if (responseBody != null && responseBody.errorCode == 0) {
                         val list = responseBody.data.datas
-
+                        collectionsLiveData.value = list
                     }
                 }
             }
         })
+        return collectionsLiveData
     }
 
-    var currentPage = 1
+    var currentPage = 0
 
-    fun initPage(cid: Int) {
-        currentPage = 1
-        collections()
+    fun initPage(): MutableLiveData<List<Collection>> {
+        currentPage = 0
+        return collections()
     }
 
-    fun nextPage(cid: Int) {
+    fun nextPage(): MutableLiveData<List<Collection>> {
         ++currentPage
-        collections()
+        return collections()
     }
 
 }
